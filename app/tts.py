@@ -1,7 +1,11 @@
 from TTS.utils.manage import ModelManager
 from TTS.utils.synthesizer import Synthesizer
 
-path = "C:/Users/asus/anaconda3/envs/texttospeech/Lib/site-packages/TTS/.models.json"
+import site
+location = site.getsitepackages()[0]
+
+path = location+"/TTS/.models.json"
+# path = "C:/Users/asus/anaconda3/envs/texttospeech/Lib/site-packages/TTS/.models.json"
 
 model_manager = ModelManager(path)
 
