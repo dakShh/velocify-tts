@@ -6,7 +6,6 @@ location = site.getsitepackages()[0]
 
 path = location+"/TTS/.models.json"
 # path = "C:/Users/asus/anaconda3/envs/texttospeech/Lib/site-packages/TTS/.models.json"
-
 model_manager = ModelManager(path)
 
 model_path, config_path, model_item = model_manager.download_model("tts_models/en/ljspeech/tacotron2-DDC")
