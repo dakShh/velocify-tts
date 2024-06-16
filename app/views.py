@@ -4,7 +4,6 @@ from distutils.log import error
 import mimetypes
 from re import template
 
-from elevenlabs import VoiceSettings
 from app import app
 from flask import render_template, request, send_file
 from app.tts import syn
@@ -12,12 +11,11 @@ from app.tts import syn
 from dotenv import load_dotenv
 load_dotenv()
 
-from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
-
-
+from elevenlabs import Voice, VoiceSettings
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+
 if not ELEVENLABS_API_KEY:
     raise ValueError("ELEVENLABS_API_KEY environment variable not set")
 
@@ -46,34 +44,23 @@ def call_voicify():
     if (request.form['text']):
         text = request.form['text']
 
-        response = client.text_to_speech.convert(
-            voice_id="pNInz6obpgDQGcFmaJgB",  # Adam pre-made voice
-            optimize_streaming_latency="0",
-            output_format="mp3_22050_32",
+        audio = client.generate(
             text=text,
-            model_id="eleven_multilingual_v2",
-            voice_settings=VoiceSettings(
-                stability=0.0,
-                similarity_boost=1.0,
-                style=0.0,
-                use_speaker_boost=True,
-            ),
+            model="eleven_multilingual_v2",
+            voice=Voice(
+                voice_id='yHx9q5iHmtVGKONrqrIf', #dez - american
+                settings=VoiceSettings(stability=0.40, similarity_boost=0.45, style=0.0, use_speaker_boost=True)
+            )
         )
 
-        print("Streaming audio data...")
-
-        # Create a BytesIO object to hold audio data
         audio_stream = io.BytesIO()
 
-        # Write each chunk of audio data to the stream
-        for chunk in response:
+        for chunk in audio:
             if chunk:
                 audio_stream.write(chunk)
 
-        # Reset stream position to the beginning
         audio_stream.seek(0)
-        return audio_stream
-
+        return send_file(audio_stream, mimetype="audio/wav")
 
     else:
         return "Please enter text! :)", 400
