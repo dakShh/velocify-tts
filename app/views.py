@@ -1,3 +1,5 @@
+import os
+import io
 from distutils.log import error
 import mimetypes
 from re import template
@@ -7,18 +9,15 @@ from app import app
 from flask import render_template, request, send_file
 from app.tts import syn
 
-
 from dotenv import load_dotenv
+load_dotenv()
+
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
 
-import os
-import io
 
-load_dotenv()
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-
 if not ELEVENLABS_API_KEY:
     raise ValueError("ELEVENLABS_API_KEY environment variable not set")
 
@@ -46,11 +45,7 @@ def call_project1():
 def call_voicify(): 
     if (request.form['text']):
         text = request.form['text']
-        # outputs = syn.tts(text)
-        # out = io.BytesIO()
-        # syn.save_wav(outputs, out)
-        # return send_file(out, mimetype="audio/wav")
-        # Perform the text-to-speech conversion
+
         response = client.text_to_speech.convert(
             voice_id="pNInz6obpgDQGcFmaJgB",  # Adam pre-made voice
             optimize_streaming_latency="0",
