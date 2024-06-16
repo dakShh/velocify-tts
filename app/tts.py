@@ -1,25 +1,18 @@
 import os
-from os.path import join, dirname
-from dotenv import load_dotenv
-from elevenlabs import VoiceSettings
-from elevenlabs.client import ElevenLabs
+
 from TTS.utils.manage import ModelManager
 from TTS.utils.synthesizer import Synthesizer
 
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+from dotenv import load_dotenv
+load_dotenv()
 
 import site
 location = site.getsitepackages()[0]
 
-# path = location+"/TTS/.models.json"
-path = "C:/Users/asus/anaconda3/envs/texttospeech/Lib/site-packages/TTS/.models.json"
+TTS_SITE_PACKAGES_PATH_LOCAL = os.getenv("TTS_SITE_PACKAGES_PATH_LOCAL")
 
-ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-print("ELEVENLABS_API_KEY: ",ELEVENLABS_API_KEY)
-client = ElevenLabs(
-    api_key=ELEVENLABS_API_KEY,
-)
+# path = location+"/TTS/.models.json"
+path = TTS_SITE_PACKAGES_PATH_LOCAL+"/TTS/.models.json"
 
 model_manager = ModelManager(path)
 
